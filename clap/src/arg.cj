@@ -1,12 +1,15 @@
 package clap
 
+import std.collection.ArrayList
+
 public class Arg {
     private var _help = None<String>
     private var _action = Set
     private var _short = None<Rune>
     private var _long = None<String>
+    private var _defaultValue = None<DefaultValue>
     private var _valueName: String
-    private var _required: Bool
+    private var _required = false
 
     public Arg(private var _name: String) {
         _valueName = _name.toAsciiUpper()
@@ -42,7 +45,7 @@ public class Arg {
         this
     }
 
-    public func defaultValue<T>(defaultValue: T): This where T <: Any {
+    public func defaultValue<T>(defaultValue: T): This where T <: Parsable<String, T> & ToString {
         this
     }
 
@@ -89,4 +92,8 @@ public class Arg {
 
 public enum ArgAction {
     Set | Append | SetTrue | SetFalse | Count | Help | Version
+}
+
+enum DefaultValue {
+    One(String) | Many(Array<String>)
 }

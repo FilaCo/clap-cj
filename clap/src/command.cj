@@ -55,7 +55,7 @@ public class Command {
         getMatches(getCommandLine())
     }
 
-    public func getMatches<ArgsT, ArgT>(args: ArgsT): ArgMatches where ArgsT <: Iterable<ArgT>, ArgT <: Any & ToString {
+    public func getMatches<ArgsT, ArgT>(args: ArgsT): ArgMatches where ArgsT <: Iterable<ArgT>, ArgT <: ToString & Any {
         Parser(this).parse(args)
     }
 
