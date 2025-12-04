@@ -1,6 +1,7 @@
 package clap
 
 import std.collection.ArrayList
+import std.convert.Parsable
 
 public class Arg {
     private var _help = None<String>
@@ -45,7 +46,9 @@ public class Arg {
         this
     }
 
-    public func defaultValue<T>(defaultValue: T): This where T <: Parsable<String, T> & ToString {
+    public func defaultValue<T>(defaultValue: T): This where T <: Parsable<T> {
+        _defaultValue = One(Box(defaultValue))
+
         this
     }
 
@@ -81,6 +84,10 @@ public class Arg {
         _long
     }
 
+    protected func getDefaultValue(): ?DefaultValue {
+        _defaultValue
+    }
+
     public func getValueName(): String {
         _valueName
     }
@@ -94,6 +101,6 @@ public enum ArgAction {
     Set | Append | SetTrue | SetFalse | Count | Help | Version
 }
 
-enum DefaultValue {
-    One(String) | Many(Array<String>)
+protected enum DefaultValue {
+    One(Box<Any>) | Many(Array<Box<Any>>)
 }

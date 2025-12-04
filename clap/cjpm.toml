@@ -1,13 +1,14 @@
 [package]
-cjc-version = "1.0.5"
+cjc-version = "1.0.0"
 name = "clap"
 description = "nothing here"
-version = "1.0.0"
+version = "0.1.0"
 target-dir = ""
-output-type = "static"
+output-type = "dynamic"
 compile-option = ""
 override-compile-option = ""
 link-option = ""
 package-configuration = {}
 
 [dependencies]
+registry = { git = "https://github.com/FilaCo/registry-cj" }
