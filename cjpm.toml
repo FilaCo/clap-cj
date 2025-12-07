@@ -1,5 +1,5 @@
 [workspace]
-members = ["clap"]
+members = ["clap", "clap_macros"]
 build-members = []
 test-members = []
 compile-option = ""

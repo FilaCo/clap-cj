@@ -1,18 +1,44 @@
 package clap
 
 import std.collection.ArrayList
-import std.convert.Parsable
+import std.deriving.Derive
 
-public class Arg {
+public struct Arg {
+    public let name: String
+    public let help: ?String
+    public let action: ArgAction
+    public let short: ?Rune
+    public let long: ?String
+    public let defaultValue: ?Box<Any>
+    public let valueName: String
+    public let required: Bool
+
+    Arg(builder: ArgBuilder) {
+        name = builder.getName()
+        help = builder.getHelp()
+        action = builder.getAction()
+        short = builder.getShort()
+        long = builder.getLong()
+        defaultValue = builder.getDefaultValue()
+        valueName = builder.getValueName()
+        required = builder.isRequired()
+    }
+
+    public static func builder(name: String): ArgBuilder {
+        ArgBuilder(name)
+    }
+}
+
+public class ArgBuilder {
     private var _help = None<String>
     private var _action = Set
     private var _short = None<Rune>
     private var _long = None<String>
-    private var _defaultValue = None<DefaultValue>
+    private var _defaultValue = None<Box<Any>>
     private var _valueName: String
     private var _required = false
 
-    public Arg(private var _name: String) {
+    ArgBuilder(private var _name: String) {
         _valueName = _name.toAsciiUpper()
     }
 
@@ -46,8 +72,8 @@ public class Arg {
         this
     }
 
-    public func defaultValue<T>(defaultValue: T): This where T <: Parsable<T> {
-        _defaultValue = One(Box(defaultValue))
+    public func defaultValue<T>(defaultValue: T): This {
+        _defaultValue = Box(defaultValue)
 
         this
     }
@@ -84,8 +110,8 @@ public class Arg {
         _long
     }
 
-    protected func getDefaultValue(): ?DefaultValue {
-        _defaultValue
+    protected func getDefaultValue<T>(): ?T {
+        _defaultValue?.value as T
     }
 
     public func getValueName(): String {
@@ -95,12 +121,13 @@ public class Arg {
     public func isRequired(): Bool {
         _required
     }
+
+    public func build(): Arg {
+        Arg(this)
+    }
 }
 
+@Derive[Equatable]
 public enum ArgAction {
     Set | Append | SetTrue | SetFalse | Count | Help | Version
-}
-
-protected enum DefaultValue {
-    One(Box<Any>) | Many(Array<Box<Any>>)
 }

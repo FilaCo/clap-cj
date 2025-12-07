@@ -1,4 +1,4 @@
 version = 0
 
 [requires]
-  registry = {git = "https://github.com/FilaCo/registry-cj", commitId = "ef86b8c8369adf695416310991592e76034948b6"}
+  registry = {git = "https://github.com/FilaCo/registry-cj", commitId = "bbadf6590321fccd3cff776a015ece500a59b973"}
